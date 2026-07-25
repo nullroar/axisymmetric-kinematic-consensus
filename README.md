@@ -151,9 +151,9 @@ See [protocol specification](./spec/AKCP-1.md),
 
 ## Project posture
 
-AKCP is pre-1.0 protocol infrastructure with a stable reference core. The
-public API follows semantic versioning; protocol compatibility follows the
-independent rules in [AKCP-1](./spec/AKCP-1.md).
+AKCP-1 is a stable reference protocol with an independently versioned package
+surface. The public API follows semantic versioning; protocol compatibility
+follows the independent rules in [AKCP-1](./spec/AKCP-1.md).
 
 Contributions should begin with
 [the contributor guide](./CONTRIBUTING.md) and preserve the consensus
