@@ -1,0 +1,33 @@
+name: Consensus verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Verify protocol implementation
+        run: npm run verify
+      - name: Verify distributable package
+        run: npm pack --dry-run
