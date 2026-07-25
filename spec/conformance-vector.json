@@ -1,0 +1,17 @@
+{
+  "name": "reference-materialization",
+  "material": {
+    "streamId": "conformance-axis",
+    "streamVersion": 1,
+    "event": {
+      "type": "PrimitiveInitialized",
+      "aggregateId": "conformance-axis",
+      "radius": "42000"
+    },
+    "commandId": "cmd-conformance-001",
+    "correlationId": "corr-conformance-001",
+    "occurredAt": "2026-01-01T00:00:00.000Z",
+    "previousDigest": null
+  },
+  "expectedDigest": "87e4b0381399149f70374e4b814246b8c57895015dad33cde6856f5715332c0b"
+}

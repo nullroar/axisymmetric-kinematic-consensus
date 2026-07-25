@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/nullroar/axisymmetric-kinematic-consensus/spec/event-envelope.schema.json",
+  "title": "AKCP-1 event envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "streamId",
+    "streamVersion",
+    "event",
+    "commandId",
+    "correlationId",
+    "occurredAt",
+    "previousDigest",
+    "digest"
+  ],
+  "properties": {
+    "streamId": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "streamVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "event": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": [
+            "PrimitiveInitialized",
+            "AngularPhaseAdvanced",
+            "RadialMetricReconfigured",
+            "PrimitiveRetired"
+          ]
+        }
+      }
+    },
+    "commandId": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "previousDigest": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      ]
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}
