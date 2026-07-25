@@ -1,0 +1,32 @@
+name: Protocol integrity
+
+on:
+  push:
+    paths:
+      - "spec/**"
+      - "src/domain/**"
+      - "src/kernel/**"
+      - "src/math/**"
+      - "test/**"
+  pull_request:
+    paths:
+      - "spec/**"
+      - "src/domain/**"
+      - "src/kernel/**"
+      - "src/math/**"
+      - "test/**"
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run verify:protocol
