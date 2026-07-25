@@ -1,0 +1,42 @@
+name: Protocol evolution proposal
+description: Propose a normative AKCP change or clarification
+title: "protocol: "
+labels:
+  - protocol
+  - design
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Protocol limitation
+      description: State the limitation without prescribing the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Affected invariants
+      description: Identify current or proposed invariant identifiers.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed semantics
+      description: Define commands, events, arithmetic, and lifecycle impact.
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility and migration
+      description: Explain replay divergence and versioning requirements.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Conformance evidence
+      description: Describe vectors, proofs, or independent implementations.
+    validations:
+      required: true

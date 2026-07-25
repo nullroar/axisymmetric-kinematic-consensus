@@ -1,0 +1,60 @@
+name: Deterministic behavior defect
+description: Report a reproducible implementation or replay defect
+title: "defect: "
+labels:
+  - defect
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Remove sensitive identifiers before attaching event material.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: subsystem
+    attributes:
+      label: Subsystem
+      options:
+        - Fixed-point arithmetic
+        - Phase normalization
+        - Command decision
+        - Event replay
+        - Integrity verification
+        - Persistence adapter
+        - Operator interface
+        - Telemetry
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include commands, event material, or test code.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected consensus state
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Observed consensus state
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Preflight
+      options:
+        - label: I ran `npm run verify`.
+          required: true
+        - label: I removed confidential journal data.
+          required: true
