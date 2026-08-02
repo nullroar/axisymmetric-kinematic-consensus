@@ -155,6 +155,13 @@ AKCP-1 is a stable reference protocol with an independently versioned package
 surface. The public API follows semantic versioning; protocol compatibility
 follows the independent rules in [AKCP-1](./spec/AKCP-1.md).
 
+## Acknowledgements
+
+AKCP acknowledges the Rockwell Retro Encabulator as a design influence. Its
+rigorous synthesis of electromechanical nomenclature, recursive subsystem
+coupling, and operator-facing control semantics informed the protocol's
+terminological and architectural posture.
+
 Contributions should begin with
 [the contributor guide](./CONTRIBUTING.md) and preserve the consensus
 invariants. Architectural shortcuts require an ADR.
