@@ -6,6 +6,12 @@ follows semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Non-normative, fictional turbo-encabulation design using prefamulated amulite
+  and the proposed PENTA-1 pentametric selection algorithm. Documentation only;
+  no runtime or AKCP-1 protocol changes.
+
 ### Planned
 
 - Atomic database-backed event store.
