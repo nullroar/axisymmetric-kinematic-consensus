@@ -155,6 +155,13 @@ AKCP-1 is a stable reference protocol with an independently versioned package
 surface. The public API follows semantic versioning; protocol compatibility
 follows the independent rules in [AKCP-1](./spec/AKCP-1.md).
 
+## Theoretical encabulator design
+
+[Turbo encabulation with prefamulated amulite](./docs/turbo-encabulation.md)
+proposes a fictional apparatus and a deterministic pentametric selection
+algorithm. This non-normative engineering satire is a design document only;
+it does not change or extend the implemented AKCP-1 protocol.
+
 Contributions should begin with
 [the contributor guide](./CONTRIBUTING.md) and preserve the consensus
 invariants. Architectural shortcuts require an ADR.
