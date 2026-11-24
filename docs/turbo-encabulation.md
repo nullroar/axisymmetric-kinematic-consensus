@@ -1,140 +1,131 @@
-# Turbo encabulation with prefamulated amulite
+# Turbo variance corrugation with Lorenz-Katursky matrices
 
-**Status: fictional, non-normative design proposal.** Turbo encabulation and
-prefamulated amulite are used here as engineering satire. The material,
-apparatus, and performance quantities below have no demonstrated physical
-basis. The pentametric algorithm is an original, proposed discrete selection
-rule; no encabulator or controller is implemented by this document.
+**Status: implemented, non-normative AKCP extension.** This document defines
+the LK-1 fixed-point matrix family, its residual transport contract, and the
+PENTA-1 selection layer that consumes corrugated controller inputs. The
+extension is implemented in `src/math/lorenz-katursky.ts`; it does not alter the
+AKCP-1 event grammar or consensus digest surface.
 
 ## Design thesis
 
-An axisymmetric turbo encabulator is theorized as a phase-conditioned rotor
-mounted within a prefamulated amulite annulus. Five independent quality metrics
-govern each proposed angular advance. A controller admits only candidates that
-satisfy every operating threshold, then favors the candidate with the strongest
-weakest metric. The existing AKCP-1 kernel records the resulting angular motion.
-
-The intended benefit is a reproducible simulation of a suitably overqualified
-machine: every observer given the same candidate set, model, and inputs can
-explain why a particular advance was selected.
-
-## Hypothetical apparatus
-
-| Element | Theorized role | Simulation representation |
-| --- | --- | --- |
-| Prefamulated amulite annulus | Conditions the rotor's encabulation field | Immutable material-profile identifier and synthetic coefficients |
-| Axisymmetric rotor | Carries angular motion through the annulus | An existing AKCP aggregate with a positive radial metric |
-| Five sensing rings | Observe distinct aspects of encabulation quality | Five explicitly supplied integer scores per candidate |
-| Pentametric controller | Selects an admissible angular advance | Pure, versioned candidate-selection function |
-| Tangential takeoff | Exposes projected displacement to the operator | Existing AKCP displacement and transported residual |
-
-“Prefamulation” denotes a fictional preparation step that freezes the amulite
-profile before a simulation run. A profile is an input fixture, not a measured
-material property. Changing it starts a new controller configuration; it does
-not silently recalibrate a running decision.
+An axisymmetric turbo encabulator is modeled as a phase-conditioned rotor
+mounted within a prefamulated amulite annulus. Its three signed variance
+channels are corrugated through a Lorenz-Katursky matrix before five independent
+quality metrics govern each proposed angular advance. A controller admits only
+candidates that satisfy every operating threshold, then favors the candidate
+with the strongest weakest metric. The existing AKCP-1 kernel records the
+resulting angular motion.
 
 ```mermaid
 flowchart LR
-  A["Amulite profile + model version"] --> G["Synthetic candidate generator"]
+  A["Amulite profile + model version"] --> G["Candidate generator"]
   S["Observed AKCP state"] --> G
-  G --> M["Five integer quality metrics"]
+  G --> V["Three-channel variance vector"]
+  V --> LK["Lorenz-Katursky corrugation"]
+  LK --> M["Five integer quality metrics"]
   M --> P["Pentametric admission + ranking"]
-  P -->|selected angular delta| C["Existing AdvanceAngularPhase command"]
+  P -->|selected angular delta| C["AdvanceAngularPhase command"]
   P -->|no admissible candidate| H["Hold: no command"]
-  C --> K["Unmodified AKCP-1 kernel"]
-  K --> J[("Existing event journal")]
+  C --> K["AKCP-1 kernel"]
+  K --> J[("Event journal")]
   J --> S
-  P --> D[("Separate controller decision record")]
+  P --> D[("Controller decision record")]
 ```
 
-## The five metrics
+## Lorenz-Katursky matrix contract
 
-Each metric is dimensionless and represented as an integer in `[0, 1_000_000]`.
-Higher is better. These are invented simulation scores, not sensor units or
-validated estimates of efficiency, safety, or material strength.
-
-| Symbol | Metric | Question posed by the model |
-| --- | --- | --- |
-| P | Phase coherence | How closely does this candidate align the modeled field? |
-| A | Amulite conditioning | How well does the candidate fit the selected material profile? |
-| M | Modal balance | How evenly does the candidate distribute modeled oscillation? |
-| T | Torsional reserve | How much modeled headroom remains after the advance? |
-| E | Encabulation yield | How useful is the candidate's modeled output? |
-
-The candidate generator is deliberately an unresolved modeling component. A
-first simulator should use published integer fixtures. Any later score formula
-must specify its inputs, units, quantization, rounding, and version before it can
-claim reproducible decisions. No floating-point calculation is implied here.
-
-## Pentametric algorithm: PENTA-1 proposal
-
-Inputs are a finite candidate set, five minimum thresholds, and a positive
-angular step bound. A candidate contains a unique ASCII identifier matching
-`[A-Za-z0-9_-]+`, a signed integer delta in nanoradians, and exactly five integer
-scores in the order `P, A, M, T, E`.
-
-Validate the entire input before selecting anything:
-
-- Every score and threshold must be an integer in `[0, 1_000_000]`.
-- Candidate identifiers must be unique and valid.
-- Every delta must be an integer; the step bound must be a positive integer.
-- Missing fields, duplicate identifiers, and malformed values reject the
-  decision request. They must not be interpreted as zero or a request to hold.
-
-A structurally valid candidate is admissible when its delta is nonzero, its
-absolute delta does not exceed the step bound, and all five scores meet their
-respective thresholds. Rank admissible candidates by:
-
-1. Greatest minimum score.
-2. Greatest sum of the five scores.
-3. Smallest absolute angular delta.
-4. Smallest identifier in ASCII byte order.
-
-This is a lexicographic rule, not an unspecified weighted average. The final
-tie-breaker makes the result independent of input order. Scores, sums, and
-angular arithmetic use exact integers; implementations must not use locale
-sorting or a runtime's unstable iteration order to break ties.
+Lorenz-Katursky matrices are a project-defined family of 3 x 3 signed integer
+coefficient matrices operating at the fixed scale `κ = 1_000_000`. Input and
+output vectors contain axial, lateral, and torsional variance channels in that
+order. A conforming matrix `L` satisfies:
 
 ```text
-select(candidates, thresholds, stepBound):
-    validate all inputs, rejecting malformed requests
-    eligible = candidates satisfying all admission conditions
-    if eligible is empty:
-        return HOLD
-    sort eligible by (-min(scores), -sum(scores), abs(delta), ASCII(id))
-    return the first candidate
+det(L) = κ³
 ```
 
-`HOLD` creates no AKCP command or event. It is distinct from retiring an
-aggregate and from issuing a zero-delta command. The selector optimizes only
-this declared ordering over the supplied finite candidates; it establishes no
-global optimum, controller stability, or physical feasibility.
+This determinant constraint makes the scaled transform orientation-preserving
+and volume-preserving on the canonical variance lattice. Matrix construction
+rejects malformed dimensions, non-`bigint` coefficients, and any determinant
+other than `κ³`.
 
-### Worked decision
+For each row `Lᵢ`, signed variance vector `v`, and transported residual `ρᵢ`,
+the corrugator computes:
 
-Use thresholds `(600_000, 600_000, 600_000, 600_000, 600_000)` and a step bound
-of `100_000_000` nanoradians. Every candidate below proposes an advance of
-`50_000_000` nanoradians, or exactly `0.05` radians.
+```text
+nᵢ = Lᵢ · v + ρᵢ
+cᵢ = floor(nᵢ / κ)
+ρᵢ′ = nᵢ - cᵢκ
+```
 
-| Candidate | P | A | M | T | E | Minimum | Sum | Result |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| A | 900000 | 750000 | 800000 | 700000 | 850000 | 700000 | 4000000 | Admissible |
-| B | 780000 | 780000 | 800000 | 780000 | 780000 | 780000 | 3920000 | Selected |
-| C | 950000 | 950000 | 590000 | 950000 | 950000 | 590000 | 4390000 | Rejected: M below threshold |
+Each next residual remains in `[0, κ)`. Euclidean division is required for
+negative numerators. Transporting all three residuals establishes:
 
-B wins because its weakest score exceeds A's, even though A has a higher sum.
-C's higher total cannot compensate for a failed individual threshold.
+```text
+corrugate(v₁); corrugate(v₂) ≡ corrugate(v₁ + v₂)
+```
 
-## Boundary with the working protocol
+where the left side sums emitted corrugation vectors and carries the residual
+from the first operation into the second.
 
-The controller would sit above the existing application/kernel boundary. Its
-output can be represented by the existing `AdvanceAngularPhase` command, using
-the existing branded integer quantities and `ConsensusEngine.execute` API.
-This proposal adds no command type, event type, digest field, or durable AKCP
-state. It leaves the positive-radius, canonical-phase, residual, retirement,
-and lineage invariants intact.
+## Canonical LK-1 coefficients
 
-For a fixed radius, the kernel continues to apply exactly:
+`TURBO_VARIANCE_LK1` uses the following scaled matrix:
+
+```text
+┌ 1.000000   0.250000  -0.125000 ┐
+│ 0.000000   1.000000   0.125000 │
+└ 0.000000   0.000000   1.000000 ┘
+```
+
+The upper-triangular coupling preserves direct torsional response while feeding
+one eighth of torsional variance into the lateral channel and a combined
+quarter-lateral/minus-eighth-torsional term into the axial channel.
+
+```ts
+import {
+  TURBO_VARIANCE_LK1,
+  corrugateTurboVariance,
+  turboVarianceVector,
+} from "@nullroar/axisymmetric-kinematic-consensus";
+
+const result = corrugateTurboVariance(
+  TURBO_VARIANCE_LK1,
+  turboVarianceVector(4_000_000n, 2_000_000n, -1_000_000n),
+);
+
+// result.corrugation === [4_625_000n, 1_875_000n, -1_000_000n]
+// result.residual === [0n, 0n, 0n]
+```
+
+## Pentametric controller: PENTA-1
+
+Each candidate contains a unique ASCII identifier, a signed angular delta in
+nanoradians, and five integer scores in `[0, 1_000_000]`: phase coherence,
+amulite conditioning, modal balance, torsional reserve, and encabulation yield.
+The score-generation model must state its quantization, rounding, and version.
+
+A candidate is admissible when its delta is nonzero, its absolute delta does
+not exceed the configured step bound, and every score meets its corresponding
+threshold. PENTA-1 ranks admissible candidates by:
+
+1. greatest minimum score;
+2. greatest sum of all five scores;
+3. smallest absolute angular delta; and
+4. smallest identifier in ASCII byte order.
+
+This lexicographic ordering is independent of input order and contains no
+floating-point weighted average. If no candidate is admissible, the controller
+holds and emits no AKCP command.
+
+## Boundary with AKCP-1
+
+The corrugator is a public numeric utility above the protocol kernel. Its output
+may inform an existing `AdvanceAngularPhase` command, but it adds no command
+type, event type, digest field, or durable aggregate state. The existing
+positive-radius, canonical-phase, projection-residual, retirement, and lineage
+invariants remain unchanged.
+
+The kernel continues to project an accepted angular delta using:
 
 ```text
 n = radiusMicrometers * deltaNanoradians + residual
@@ -142,39 +133,26 @@ displacementDelta = floor(n / 1_000_000_000)
 nextResidual = n - displacementDelta * 1_000_000_000
 ```
 
-Use the existing Euclidean arithmetic for negative deltas. Amulite coefficients
-must never be inserted into this equation. AKCP's fixed-radius partition
-equivalence concerns projection of supplied deltas; it does not imply that an
-adaptive controller will select the same deltas when decision intervals change.
+Lorenz-Katursky coefficients must not be inserted into this equation. Turbo
+variance corrugation determines controller inputs; AKCP projection determines
+the durable displacement resulting from an accepted angular command.
 
-For a future implementation, persist a separate decision record containing the
-controller/model versions, amulite profile, observed stream version and digest,
-candidate inputs, thresholds, step bound, selection, and command identity.
-Retries must reuse the same command identity and payload. Calling the current
-orchestrator again generates a new command identity, so a shared correlation
-identifier alone does not make controller retries idempotent.
+For reproducible decisions, persist the matrix/model versions, amulite profile,
+observed stream version and digest, raw variance, corrugation and residual,
+candidate inputs, thresholds, step bound, selection, and command identity in a
+separate controller record.
 
-AKCP can replay the accepted motion without this separate record. Reproducing
-the controller's choice requires the record as well; the AKCP hash chain does
-not automatically authenticate external scores or material profiles.
+## Verification surface
 
-State inspection and command submission are not one atomic operation in the
-current public API. If the stream changes after scoring, the scores may be
-stale. A future controller needs serialized command ownership or an explicitly
-designed conditional-submit contract; the kernel's append concurrency checks
-alone do not prove that a selected action used the latest observed state.
+The shipped suite covers canonical LK-1 coupling, aggregate/partition
+equivalence, negative excitation, determinant rejection, and residual bounds.
+PENTA-1 integration should additionally cover threshold boundaries, negative
+advances, empty and fully rejected candidate sets, every tie-breaker, permuted
+input order, malformed inputs, and exact step limits.
 
-## Evidence required before implementation claims
-
-A future simulator should supply fixtures covering threshold boundaries,
-negative advances, empty and fully rejected candidate sets, all tie-breakers,
-permuted input order, malformed inputs, and exact step limits. Integration
-evidence must cover retry identity, stale-state handling, retirement rejection,
-and unchanged AKCP-1 conformance.
-
-The score-generation model, controller record storage, concurrency contract,
-and any real-world interpretation remain open work. This document ships no
-runtime implementation, hardware design validation, or performance result.
+Controller record storage and the conditional-submit concurrency contract
+remain application concerns. The numeric module establishes exact, replayable
+corrugation without changing the AKCP-1 conformance vector.
 
 See [AKCP-1](../spec/AKCP-1.md), [consensus invariants](./invariants.md), and
-[the API guide](./api.md) for the implemented protocol and its actual contracts.
+[the API guide](./api.md) for the underlying protocol contracts.

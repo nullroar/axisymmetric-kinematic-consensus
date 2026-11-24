@@ -155,12 +155,13 @@ AKCP-1 is a stable reference protocol with an independently versioned package
 surface. The public API follows semantic versioning; protocol compatibility
 follows the independent rules in [AKCP-1](./spec/AKCP-1.md).
 
-## Theoretical encabulator design
+## Turbo variance corrugation
 
-[Turbo encabulation with prefamulated amulite](./docs/turbo-encabulation.md)
-proposes a fictional apparatus and a deterministic pentametric selection
-algorithm. This non-normative engineering satire is a design document only;
-it does not change or extend the implemented AKCP-1 protocol.
+[Turbo variance corrugation](./docs/turbo-encabulation.md) extends the numeric
+surface with exact-integer Lorenz-Katursky matrix coupling. The implementation
+preserves the canonical variance lattice, transports per-channel residuals, and
+keeps partitioned excitation equivalent to aggregate excitation. The extension
+is available from the public package without changing AKCP-1 event semantics.
 
 Contributions should begin with
 [the contributor guide](./CONTRIBUTING.md) and preserve the consensus

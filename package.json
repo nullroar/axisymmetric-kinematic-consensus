@@ -38,7 +38,9 @@
     "determinism",
     "kinematics",
     "consensus",
-    "projection"
+    "projection",
+    "lorenz-katursky",
+    "variance-corrugation"
   ],
   "author": "Nullroar",
   "license": "MIT",
