@@ -6,6 +6,14 @@ follows semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Exact-integer turbo variance corrugation using volume-preserving
+  Lorenz-Katursky matrices and per-channel Euclidean residual transport.
+- Public matrix construction, canonical LK-1 coefficients, and partition
+  equivalence tests for the three-channel corrugation surface.
+- PENTA-1 pentametric selection design for corrugated controller inputs.
+
 ### Planned
 
 - Atomic database-backed event store.

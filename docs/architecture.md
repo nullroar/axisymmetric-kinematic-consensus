@@ -21,6 +21,7 @@ flowchart TB
   subgraph Numeric
     C["Cyclotomic normalization"]
     P["Residual arc projection"]
+    LK["Lorenz-Katursky corrugation"]
     F["Fixed-point codec"]
   end
   subgraph Integrity
@@ -42,6 +43,7 @@ flowchart TB
   E --> R
   D --> C
   D --> P
+  LK --> F
   R --> I
   E --> L
   L --> H

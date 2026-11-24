@@ -18,6 +18,7 @@ export * from "./kernel/serialization.js";
 export * from "./kernel/snapshot.js";
 export * from "./math/cyclotomic.js";
 export * from "./math/fixed.js";
+export * from "./math/lorenz-katursky.js";
 export * from "./math/projection.js";
 export * from "./ports/clock.js";
 export * from "./ports/event-store.js";
